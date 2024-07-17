@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	TeleToken = os.Getenv("TOKEN")
+	TeleToken = os.Getenv("TELE_TOKEN")
 )
 
 // kbotCmd represents the kbot command
@@ -39,7 +39,7 @@ to quickly create a Cobra application.`,
 		})
 
 		if err != nil {
-			log.Fatalf("Plaese check TOKEN env variable. %s", err)
+			log.Fatalf("Plaese check TELE_TOKEN env variable. %s", err)
 			return
 		}
 
