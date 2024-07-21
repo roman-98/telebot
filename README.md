@@ -16,19 +16,14 @@ This is a simple Telegram bot that performs basic commands.
     git clone https://github.com/roman-98/telebot.git
     cd telebot
     ```
-
-3. Export your Telegram bot token:
-    ```sh
-    export TELE_TOKEN='your_telegram_bot_token'
-    ```
-
+    
 3. **Build and run the Docker container:**
 
     Make sure Docker is installed and running on your machine. Then, execute the following commands:
 
     ```sh
     # Build the Docker image
-    sudo docker build .
+    sudo docker build -t telebot:latest .
 
     # Run the Docker container
     sudo docker run -e TELE_TOKEN='your-bot-token' IMAGE_ID ./telebot start
@@ -46,6 +41,6 @@ This is a simple Telegram bot that performs basic commands.
 ## Usage Commands
 
 - `/start` - returns a message to the logs.
-- `/start hello` - receive the message "Hello I'm Kbot v1.0.2!".
+- `/start hello` - receive the message "Hello I'm Kbot 1f5cb7d-1f5cb7d!".
 
 
