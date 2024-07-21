@@ -27,4 +27,5 @@ push:
 
 clean:
 	rm -rf telebot
-	docker rmi ${REGISTRY}/${APP}:${VERSION}-${TARGETARCH}
+	@IMAGE_TAG=${REGISTRY}/${APP}:${VERSION}-${TARGET_ARC}; \
+	if [ -n "$$(docker images -q $${IMAGE_TAG})" ]; then docker rmi -f $${IMAGE_TAG}; else echo "Image not found"; fi
