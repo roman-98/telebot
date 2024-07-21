@@ -19,13 +19,29 @@ This is a simple Telegram bot that performs basic commands.
 
 3. Export your Telegram bot token:
     ```sh
-    export TOKEN='your_telegram_bot_token'
+    export TELE_TOKEN='your_telegram_bot_token'
     ```
 
-4. Run the bot:
+3. **Build and run the Docker container:**
+
+    Make sure Docker is installed and running on your machine. Then, execute the following commands:
+
     ```sh
-    ./telebot start
+    # Build the Docker image
+    sudo docker build .
+
+    # Run the Docker container
+    sudo docker run -e TELE_TOKEN='your-bot-token' IMAGE_ID ./telebot start
     ```
+
+4. **Verify the container is running:**
+
+    ```sh
+    sudo docker ps
+    ```
+
+    You should see your `telebot` container in the list of running containers.
+
 
 ## Usage Commands
 
