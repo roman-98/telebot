@@ -35,6 +35,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
@@ -42,7 +43,8 @@ jobs:
 
     - uses: mikefarah/yq@master
       with:
-        cmd: yq -i '.image.tag=strenv(VERSION) | .image.arch=strenv(TARGETARCH)' helm/values.yaml
+        cmd: yq -i '.image.tag=strenv(VERSION)' helm/values.yaml
+
     - run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
