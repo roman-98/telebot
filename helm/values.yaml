@@ -5,8 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: romanstripa
+  registry: "ghcr.io"
+  repository: "roman-98/telebot"
   tag: "fa24d6b-fa24d6b"
+  os: linux
   arch: amd64
 secret:
   name: "telebot"
