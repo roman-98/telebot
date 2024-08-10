@@ -27,7 +27,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build&Push
         env:
-          APP: "kbot"
+          APP: "telebot"
           REGISTRY: ${{ secrets.DOCKERHUB_USERNAME }}
         run: make image push TARGETARCH=$TARGETARCH
       - name: Clean
