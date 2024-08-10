@@ -52,3 +52,5 @@ jobs:
         git config user.email github-actions@github.com
         git commit -am "update version $VERSION"
         git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
