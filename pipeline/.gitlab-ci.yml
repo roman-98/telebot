@@ -1,0 +1,27 @@
+variables:
+  OS_CHOICES:
+    value: linux
+    options: 
+      - "linux"
+      - "darwin"
+      - "windows"
+
+  ARCH_CHOICES:
+    value: amd64
+    options: 
+      - "amd64"
+      - "arm64"
+
+
+stages:
+  - build
+
+build:
+  stage: build
+  variables:
+    OS: $OS_CHOICES
+    ARCH: $ARCH_CHOICES
+  script:
+    - |
+      echo "Build for platform $OS"
+      echo "Build for arch: $ARCH"
