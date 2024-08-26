@@ -5,11 +5,10 @@
 replicaCount: 1
 
 image:
-  registry: "ghcr.io"
-  repository: "roman-98/telebot"
-  tag: "v1.0.0-yu483iu-linux-amd64"
-  os: linux
-  arch: amd64
+  repository: ghcr.io/roman-98/telebot
+  tag: "v1.0.0-89hv8s"
+  os: "linux"
+  arch: "amd64"
 secret:
   name: "telebot"
   tokenName: "TELE_TOKEN"
