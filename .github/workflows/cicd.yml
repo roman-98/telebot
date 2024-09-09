@@ -34,25 +34,47 @@ jobs:
         IMAGE_NAME=ghcr.io/${{ github.repository }}:${{ env.TAG }}-linux-amd64
         docker build -t $IMAGE_NAME .
         docker push $IMAGE_NAME
-      
-  #cd:
-    #name: CD
-    #needs: ci
-    #runs-on: ubuntu-latest
 
-    #steps:
+  deploy:
+    name: Deploy Secrets to Kubernetes
+    runs-on: ubuntu-latest
 
-    #- uses: actions/checkout@v3
-      #with:
-        #fetch-depth: 0
-    #- run: echo "VERSION=$(git describe --tags --abbrev=0)-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v3
 
-    #- uses: mikefarah/yq@master
-      #with:
-        #cmd: yq -i '.image.tag=strenv(VERSION)' helm/values.yaml
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        export_default_credentials: true
 
-    #- run: |
-        #git config user.name github-actions
-        #git config user.email github-actions@github.com
-        #git commit -am "update version $VERSION"
-        #git push
+    - name: Retrieve TELE_TOKEN from GCP Secret Manager
+      run: |
+        TELE_TOKEN=$(gcloud secrets versions access latest --secret=TELE_TOKEN)
+        echo "TELE_TOKEN=$TELE_TOKEN" >> $GITHUB_ENV
+
+    - name: Create Kubernetes Secret manifest
+      run: |
+        kubectl create secret generic telegram-bot-secret \
+          --from-literal=TELE_TOKEN=$TELE_TOKEN \
+          --dry-run=client -o yaml > ./k8s-secret.yaml
+
+    - name: Encrypt Secret using SOPS and GCP KMS
+      run: |
+        sops --kms projects/${{ secrets.GCP_PROJECT_ID }}/locations/global/keyRings/YOUR_KEYRING/cryptoKeys/YOUR_KEY \
+          --encrypt ./k8s-secret.yaml > ./k8s-secret.enc.yaml
+
+    - name: Commit and push encrypted secret
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add ./k8s-secret.enc.yaml
+        git commit -m "Update encrypted Kubernetes secret"
+        git push
+
+    - name: Apply changes with Flux
+      run: |
+        flux reconcile source git flux-system
+        flux reconcile kustomization flux-system
